@@ -13,18 +13,18 @@ class ExampleClass
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    string firstName;
-    string lastName;
+    public string firstName;
+    public string lastName;
     int ExampleProperty { get; set; }
 
     int _exampleBackingField;
-    int ExampleFullyImplementedProperty
+    public int ExampleFullyImplementedProperty
     {
         get
         {
             return _exampleBackingField;
         }
-        set
+        private set
         {
             _exampleBackingField = value;
         }
@@ -50,6 +50,9 @@ class Program
     {
         ExampleClass newObject = new ExampleClass();
         Console.WriteLine(newObject.upperCaseFullName());
+        newObject.firstName = "Jane";
+        Console.WriteLine(newObject.upperCaseFullName());
+
         ExampleClass newObject2 = new ExampleClass("Jane", "Sue");
         Console.WriteLine(newObject2.upperCaseFullName());
     }
