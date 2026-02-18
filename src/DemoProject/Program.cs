@@ -3,6 +3,16 @@
 
 class ExampleClass
 {
+    public ExampleClass()
+    {
+        firstName = "John";
+        lastName = "Doe";
+    }
+    public ExampleClass(string firstName, string lastName)
+    {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
     string firstName;
     string lastName;
     int ExampleProperty { get; set; }
@@ -39,7 +49,8 @@ class Program
     static void Main(string[] args)
     {
         ExampleClass newObject = new ExampleClass();
-        newObject.upperCaseFullName();
-        Console.WriteLine("Hello, World!");
+        Console.WriteLine(newObject.upperCaseFullName());
+        ExampleClass newObject2 = new ExampleClass("Jane", "Sue");
+        Console.WriteLine(newObject2.upperCaseFullName());
     }
 }
