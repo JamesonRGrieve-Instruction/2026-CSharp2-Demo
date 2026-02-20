@@ -1,46 +1,45 @@
-﻿namespace DemoProject;
+﻿using System.Drawing;
+
+namespace DemoProject;
 
 
-class ExampleClass
+class Pen
 {
-    public ExampleClass()
+    public Pen(string brand, string colour)
     {
-        firstName = "John";
-        lastName = "Doe";
+        Brand = brand;
+        Colour = colour;
+        InkLevel = 100;
     }
-    public ExampleClass(string firstName, string lastName)
+    public string Brand
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        get; set;
     }
-    public string firstName;
-    public string lastName;
-    int ExampleProperty { get; set; }
 
-    int _exampleBackingField;
-    public int ExampleFullyImplementedProperty
+    public string Colour
     {
+        get; set;
+    }
+
+    private float _inkLevel;
+    public float InkLevel
+    {
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            _inkLevel = value;
+        }
         get
         {
-            return _exampleBackingField;
-        }
-        private set
-        {
-            _exampleBackingField = value;
+            return _inkLevel;
         }
     }
-
-    public string FullName
+    public void write(int letters)
     {
-        get
-        {
-            return $"{firstName} {lastName}";
-        }
-    }
-
-    public string upperCaseFullName()
-    {
-        return FullName.ToUpper();
+        InkLevel -= letters * 0.5f;
     }
 
 }
@@ -48,12 +47,17 @@ class Program
 {
     static void Main(string[] args)
     {
-        ExampleClass newObject = new ExampleClass();
-        Console.WriteLine(newObject.upperCaseFullName());
-        newObject.firstName = "Jane";
-        Console.WriteLine(newObject.upperCaseFullName());
+        Pen myPen = new Pen("Bic", "Blue");
+        myPen.write(100);
+        myPen.write(42);
+        try
+        {
+            myPen.write(200);
+        }
+        catch
+        {
 
-        ExampleClass newObject2 = new ExampleClass("Jane", "Sue");
-        Console.WriteLine(newObject2.upperCaseFullName());
+        }
+        Console.WriteLine(myPen.InkLevel);
     }
 }
