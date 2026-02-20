@@ -3,7 +3,7 @@
 namespace DemoProject;
 
 
-class Pen
+public class Pen
 {
     public Pen(string brand, string colour)
     {
