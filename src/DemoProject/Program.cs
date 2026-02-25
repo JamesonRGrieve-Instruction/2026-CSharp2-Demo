@@ -1,7 +1,15 @@
 ﻿namespace DemoProject;
 
 
-class ExampleClass
+
+abstract class PersonClass
+{
+    public string firstName;
+    public string lastName;
+    public abstract string upperCaseFullName();
+}
+
+class ExampleClass : PersonClass
 {
     public ExampleClass()
     {
@@ -13,8 +21,6 @@ class ExampleClass
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    public string firstName;
-    public string lastName;
     int ExampleProperty { get; set; }
 
     int _exampleBackingField;
@@ -38,11 +44,21 @@ class ExampleClass
         }
     }
 
-    public string upperCaseFullName()
+    public override string upperCaseFullName()
     {
         return FullName.ToUpper();
     }
 
+
+
+}
+
+class DerivedClass : ExampleClass
+{
+    public override string upperCaseFullName()
+    {
+        return FullName.ToUpper();
+    }
 }
 class Program
 {
@@ -55,5 +71,18 @@ class Program
 
         ExampleClass newObject2 = new ExampleClass("Jane", "Sue");
         Console.WriteLine(newObject2.upperCaseFullName());
+
+
+        List<PersonClass> myList = new List<PersonClass>();
+        myList.Add(newObject);
+        myList.Add(new DerivedClass());
+
+        foreach (PersonClass thing in myList)
+        {
+            thing.upperCaseFullName();
+        }
+
+
+
     }
 }
