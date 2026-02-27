@@ -1,59 +1,120 @@
 ﻿namespace DemoProject;
 
 
-class ExampleClass
+class Rectangle
 {
-    public ExampleClass()
+    public Rectangle(double length, double width)
     {
-        firstName = "John";
-        lastName = "Doe";
+        Length = length;
+        Width = width;
     }
-    public ExampleClass(string firstName, string lastName)
-    {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-    public string firstName;
-    public string lastName;
-    int ExampleProperty { get; set; }
+    public double Length { get; set; }
+    public double Width { get; set; }
 
-    int _exampleBackingField;
-    public int ExampleFullyImplementedProperty
+    public bool IsSquare
     {
         get
         {
-            return _exampleBackingField;
-        }
-        private set
-        {
-            _exampleBackingField = value;
+            return Length == Width;
         }
     }
-
-    public string FullName
+    public double Area
     {
         get
         {
-            return $"{firstName} {lastName}";
+            return Length * Width;
+        }
+    }
+    public double Perimeter
+    {
+        get
+        {
+            return Length * 2 + Width * 2;
+        }
+    }
+    public Rectangle containWithSquare()
+    {
+        double max = Math.Max(Length, Width);
+        return new Rectangle(max, max);
+    }
+}
+class Triangle
+{
+    public Triangle(double bottom, double height)
+    {
+        Base = bottom;
+        Height = height;
+    }
+    public double Base { get; set; }
+    public double Height { get; set; }
+
+    public double Area
+    {
+        get
+        {
+            return Base * Height / 2;
         }
     }
 
-    public string upperCaseFullName()
+    public Rectangle containWithRectangle()
     {
-        return FullName.ToUpper();
+        return new Rectangle(Base, Height);
     }
 
 }
+class Circle
+{
+    public Circle(double radius)
+    {
+        Radius = radius;
+    }
+
+    public double Radius { get; set; }
+
+    public double Diameter
+    {
+        get
+        {
+            return 2 * Radius;
+        }
+    }
+    public double Area
+    {
+        get
+        {
+            return Math.PI * Math.Pow(Radius, 2);
+        }
+    }
+    public double Circumference
+    {
+        get
+        {
+            return Math.PI * Diameter;
+        }
+    }
+}
 class Program
 {
+    static double getNumber(string prompt)
+    {
+        Console.Write(prompt);
+        return double.Parse(Console.ReadLine());
+    }
     static void Main(string[] args)
     {
-        ExampleClass newObject = new ExampleClass();
-        Console.WriteLine(newObject.upperCaseFullName());
-        newObject.firstName = "Jane";
-        Console.WriteLine(newObject.upperCaseFullName());
+        Rectangle rect = new Rectangle(getNumber("Please enter rectangle Length: "), getNumber("Please enter rectangle Width: "));
+        Triangle tri = new Triangle(getNumber("Please enter triangle Base: "), getNumber("Please enter triangle Height: "));
+        Circle circ = new Circle(getNumber("Please enter cirlce Radius: "));
 
-        ExampleClass newObject2 = new ExampleClass("Jane", "Sue");
-        Console.WriteLine(newObject2.upperCaseFullName());
+        Console.WriteLine($"Rectangle: L: {rect.Length} W: {rect.Width} A: {rect.Area} P: {rect.Perimeter} S?: {rect.IsSquare}");
+        Rectangle containing = rect.containWithSquare();
+        Console.WriteLine($"Square Containing Rectangle: L: {containing.Length} W: {containing.Width} A: {containing.Area} P: {containing.Perimeter} S?: {containing.IsSquare}");
+        Console.WriteLine($"Triangle: L: {tri.Base} W: {tri.Height} A: {rect.Area}");
+        containing = tri.containWithRectangle();
+        Console.WriteLine($"Rectangle Containing Triangle: L: {containing.Length} W: {containing.Width} A: {containing.Area} P: {containing.Perimeter} S?: {containing.IsSquare}");
+        Console.WriteLine($"Circle: R: {circ.Radius} D: {circ.Diameter} A: {circ.Area} C: {circ.Circumference}");
+
+
+
     }
 }
