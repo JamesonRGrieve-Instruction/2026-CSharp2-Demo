@@ -2,85 +2,88 @@
 
 
 
-abstract class PersonClass
+abstract class WritingUtensil
 {
-    public string firstName;
-    public string lastName;
-    public abstract string upperCaseFullName();
+    public string Brand { get; set; }
+    public abstract void write(int characters);
 }
 
-class ExampleClass : PersonClass
+class Pen : WritingUtensil
 {
-    public ExampleClass()
+    public Pen()
     {
-        firstName = "John";
-        lastName = "Doe";
+        Brand = "Bic";
+        Colour = "Black";
+        InkLevel = 100;
     }
-    public ExampleClass(string firstName, string lastName)
-    {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-    int ExampleProperty { get; set; }
 
-    int _exampleBackingField;
-    public int ExampleFullyImplementedProperty
+    public string Colour { get; set; }
+    private float _inkLevel;
+    public float InkLevel
     {
         get
         {
-            return _exampleBackingField;
+            return _inkLevel;
         }
-        private set
+        set
         {
-            _exampleBackingField = value;
+            if (value < 0)
+            {
+                throw new Exception("Ink percentage cannot be negative!");
+            }
+            _inkLevel = value;
         }
     }
+    public override void write(int characters)
+    {
+        InkLevel -= characters * 0.5f;
+    }
+}
 
-    public string FullName
+class Pencil : WritingUtensil
+{
+    public Pencil()
+    {
+        Brand = "Ticonderoga";
+        Length = 20;
+    }
+    private float _length;
+    public float Length
     {
         get
         {
-            return $"{firstName} {lastName}";
+            return _length;
+        }
+        set
+        {
+            if (value < 0)
+            {
+                throw new Exception("Length cannot be negative!");
+            }
         }
     }
-
-    public override string upperCaseFullName()
+    public override void write(int characters)
     {
-        return FullName.ToUpper();
-    }
-
-
-
-}
-
-class DerivedClass : ExampleClass
-{
-    public override string upperCaseFullName()
-    {
-        return FullName.ToUpper();
+        Length -= characters * 0.25f;
     }
 }
 class Program
 {
     static void Main(string[] args)
     {
-        ExampleClass newObject = new ExampleClass();
-        Console.WriteLine(newObject.upperCaseFullName());
-        newObject.firstName = "Jane";
-        Console.WriteLine(newObject.upperCaseFullName());
-
-        ExampleClass newObject2 = new ExampleClass("Jane", "Sue");
-        Console.WriteLine(newObject2.upperCaseFullName());
-
-
-        List<PersonClass> myList = new List<PersonClass>();
-        myList.Add(newObject);
-        myList.Add(new DerivedClass());
-
-        foreach (PersonClass thing in myList)
+        Console.Write("Enter P for pen or C for pencil: ");
+        char choice = char.Parse(Console.ReadLine().Trim().ToUpper());
+        WritingUtensil utensil = (choice == 'P' ? new Pen() : new Pencil());
+        string letters;
+        do
         {
-            thing.upperCaseFullName();
-        }
+            Console.Write("Enter a number of characters to write or 'exit': ");
+            letters = Console.ReadLine().Trim();
+            if (letters != "exit")
+            {
+                utensil.write(int.Parse(letters));
+            }
+        } while (letters != "exit");
 
 
 
