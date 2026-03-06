@@ -1,7 +1,14 @@
 ﻿namespace DemoProject;
 
 
-class Rectangle
+public abstract class Shape
+{
+    public abstract double Perimeter { get; }
+    public abstract double Area { get; }
+    public abstract Rectangle Contain();
+}
+
+public class Rectangle : Shape
 {
     public Rectangle(double length, double width)
     {
@@ -18,27 +25,27 @@ class Rectangle
             return Length == Width;
         }
     }
-    public double Area
+    public override double Area
     {
         get
         {
             return Length * Width;
         }
     }
-    public double Perimeter
+    public override double Perimeter
     {
         get
         {
             return Length * 2 + Width * 2;
         }
     }
-    public Rectangle containWithSquare()
+    public override Rectangle Contain()
     {
-        double max = Math.Max(Length, Width);
-        return new Rectangle(max, max);
+        double side = Math.Max(Length, Width);
+        return new Rectangle(side, side);
     }
 }
-class Triangle
+public class Triangle : Shape
 {
     public Triangle(double bottom, double height)
     {
@@ -48,7 +55,15 @@ class Triangle
     public double Base { get; set; }
     public double Height { get; set; }
 
-    public double Area
+    public override double Perimeter
+    {
+        get
+        {
+            return Base + Math.Sqrt(Math.Pow(Base, 2) + 4 * Math.Pow(Height, 2));
+        }
+    }
+
+    public override double Area
     {
         get
         {
@@ -56,13 +71,14 @@ class Triangle
         }
     }
 
-    public Rectangle containWithRectangle()
+    public override Rectangle Contain()
     {
-        return new Rectangle(Base, Height);
+        double side = Math.Max(Base, Height);
+        return new Rectangle(side, side);
     }
 
 }
-class Circle
+public class Circle : Shape
 {
     public Circle(double radius)
     {
@@ -78,7 +94,7 @@ class Circle
             return 2 * Radius;
         }
     }
-    public double Area
+    public override double Area
     {
         get
         {
@@ -92,6 +108,11 @@ class Circle
             return Math.PI * Diameter;
         }
     }
+    public override double Perimeter => Circumference;
+    public override Rectangle Contain()
+    {
+        return new Rectangle(Diameter, Diameter);
+    }
 }
 class Program
 {
@@ -102,19 +123,17 @@ class Program
     }
     static void Main(string[] args)
     {
-        Rectangle rect = new Rectangle(getNumber("Please enter rectangle Length: "), getNumber("Please enter rectangle Width: "));
-        Triangle tri = new Triangle(getNumber("Please enter triangle Base: "), getNumber("Please enter triangle Height: "));
-        Circle circ = new Circle(getNumber("Please enter cirlce Radius: "));
+        List<Shape> shapes = new List<Shape>();
+        string choice = "";
+        do
 
-        Console.WriteLine($"Rectangle: L: {rect.Length} W: {rect.Width} A: {rect.Area} P: {rect.Perimeter} S?: {rect.IsSquare}");
-        Rectangle containing = rect.containWithSquare();
-        Console.WriteLine($"Square Containing Rectangle: L: {containing.Length} W: {containing.Width} A: {containing.Area} P: {containing.Perimeter} S?: {containing.IsSquare}");
-        Console.WriteLine($"Triangle: L: {tri.Base} W: {tri.Height} A: {rect.Area}");
-        containing = tri.containWithRectangle();
-        Console.WriteLine($"Rectangle Containing Triangle: L: {containing.Length} W: {containing.Width} A: {containing.Area} P: {containing.Perimeter} S?: {containing.IsSquare}");
-        Console.WriteLine($"Circle: R: {circ.Radius} D: {circ.Diameter} A: {circ.Area} C: {circ.Circumference}");
-
-
-
+        {
+            Console.Write("Create a Shape\n\t1. Rectangle\n\t2. Triangle\n\t3. Circle\n\t0. Done\nChoose: ");
+            choice = Console.ReadLine().Trim();
+            if (choice == "1") shapes.Add(new Rectangle(getNumber("Please enter rectangle Length: "), getNumber("Please enter rectangle Width: ")));
+            else if (choice == "2") shapes.Add(new Triangle(getNumber("Please enter triangle Base: "), getNumber("Please enter triangle Height: ")));
+            else if (choice == "3") shapes.Add(new Circle(getNumber("Please enter circle Radius: ")));
+            Console.WriteLine($"Total Perimeter: {shapes.Sum(shape => shape.Perimeter)} | Total Area: {shapes.Sum(shape => shape.Area)} | Total Containing Area: {shapes.Sum(shape => shape.Contain().Area)}");
+        } while (choice != "0");
     }
 }
