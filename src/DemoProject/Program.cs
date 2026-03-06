@@ -3,46 +3,46 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-public class JokeDTO
+public class IPDTO
 {
-    public string id { get; set; }
-    public string joke { get; set; }
-    public int status { get; set; }
+    public string ip { get; set; }
 }
 class Program
 {
-    static async Task<string> generateString()
+    static int getInput(string prompt)
     {
-        await Task.Delay(1000);
-        return "Hello, World!";
+        Console.Write(prompt);
+        return int.Parse(Console.ReadLine());
     }
-    static async Task<JokeDTO?> getJoke()
+    static async Task<IPDTO?> getIP()
     {
         using (HttpClient client = new HttpClient())
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-            return await client.GetFromJsonAsync<JokeDTO>("https://icanhazdadjoke.com/");
+            return await client.GetFromJsonAsync<IPDTO>("https://api.ipify.org?format=json");
         }
     }
     static async Task Main(string[] args)
     {
-        Console.WriteLine("Start.");
-        await Task.Delay(1000);
-        Console.WriteLine("Call Function.");
-        Console.WriteLine(await generateString());
-        Console.WriteLine(factorial(1, 5));
-        Console.WriteLine($"{Environment.UserName} on {Environment.MachineName} running {Environment.OSVersion}");
-        JokeDTO? joke = await getJoke();
-        if (joke != null)
+
+        IPDTO ip = new IPDTO() { ip = "unknown" };
+        try
         {
-            Console.WriteLine(joke.joke);
+            ip = await getIP() ?? ip;
         }
+        catch
+        {
+
+        }
+        Console.WriteLine($"{Environment.UserName} on {Environment.MachineName} at {ip.ip}, hello!");
+        count(getInput("Enter first number:"), getInput("Enter second number:"));
     }
 
-    static int factorial(int start, int end)
+    static void count(int start, int end)
     {
-        return start >= end ? start : start + factorial(start + 1, end);
+        Console.WriteLine(start);
+        if (start < end) count(start + 1, end);
     }
 }
