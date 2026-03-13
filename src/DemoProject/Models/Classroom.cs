@@ -4,14 +4,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DemoProject.Models
 {
     [Table("example_parent")]
-    public partial class ExampleParent
+    public partial class ClassRoom
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int ID { get; set; }
 
-        [InverseProperty(nameof(ExampleTable.ExampleParent))]
-        public virtual List<ExampleTable>? ExampleTables { get; set; }
+        [Column("room_number")]
+        public int RoomNumber { get; set; }
+
+
+        [InverseProperty(nameof(Student.ClassRoom))]
+        public virtual List<Student>? Students { get; set; }
     }
 }

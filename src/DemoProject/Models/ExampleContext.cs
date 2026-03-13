@@ -14,8 +14,8 @@ namespace DemoProject.Models
         {
 
         }
-        public virtual DbSet<ExampleTable> ExampleTables { get; set; }
-        public virtual DbSet<ExampleParent> ExampleParents { get; set; }
+        public virtual DbSet<Student> ExampleTables { get; set; }
+        public virtual DbSet<ClassRoom> ExampleParents { get; set; }
         public static void LoadEnvironment()
         {
             try
@@ -66,35 +66,66 @@ namespace DemoProject.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ExampleParent>(entity =>
+            modelBuilder.Entity<ClassRoom>(entity =>
             {
                 entity.HasData([
-                    new ExampleParent() {
-                        ID = -1
+                    new ClassRoom() {
+                        ID = -1,
+                        RoomNumber = 101
+                    },
+                    new ClassRoom() {
+                        ID = -2,
+                        RoomNumber = 102
                     }
                 ]);
             });
-            modelBuilder.Entity<ExampleTable>(entity =>
+            modelBuilder.Entity<Student>(entity =>
             {
-                entity.HasOne(child => child.ExampleParent)
-                    .WithMany(parent => parent.ExampleTables)
-                    .HasForeignKey(child => child.ParentID)
+                entity.HasOne(child => child.ClassRoom)
+                    .WithMany(parent => parent.Students)
+                    .HasForeignKey(child => child.ClassRoomID)
                     .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName($"FK_${nameof(ExampleTable)}_{nameof(ExampleParent)}");
+                    .HasConstraintName($"FK_${nameof(Student)}_{nameof(ClassRoom)}");
                 entity.HasData(
-                    [new ExampleTable()
+                    [new Student()
                     {
                         ID = -1,
-                        ParentID = -1
-                    },new ExampleTable()
+                        ClassRoomID = -1,
+                        FirstName = "John",
+                        LastName = "Doe"
+                    },new Student()
                     {
                         ID = -2,
-                        ParentID = -1
-                    },new ExampleTable()
+                        ClassRoomID = -1,
+                        FirstName = "Jane",
+                        LastName = "Doe"
+                    },new Student()
                     {
                         ID = -3,
-                        ParentID = -1
-                    }]
+                        ClassRoomID = -1,
+                        FirstName = "Test",
+                        LastName = "Student"
+                    },
+                    new Student()
+                    {
+                        ID = -4,
+                        ClassRoomID = -2,
+                        FirstName = "A",
+                        LastName = "Student"
+                    },new Student()
+                    {
+                        ID = -5,
+                        ClassRoomID = -2,
+                        FirstName = "B",
+                        LastName = "Student"
+                    },new Student()
+                    {
+                        ID = -6,
+                        ClassRoomID = -2,
+                        FirstName = "C",
+                        LastName = "Student"
+                    },
+                    ]
                 );
             });
 
