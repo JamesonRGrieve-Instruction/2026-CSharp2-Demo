@@ -15,6 +15,7 @@ namespace DemoProject.Models
 
         }
         public virtual DbSet<ExampleTable> ExampleTables { get; set; }
+        public virtual DbSet<ExampleParent> ExampleParents { get; set; }
         public static void LoadEnvironment()
         {
             try
@@ -65,21 +66,38 @@ namespace DemoProject.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ExampleParent>(entity =>
+            {
+                entity.HasData([
+                    new ExampleParent() {
+                        ID = -1
+                    }
+                ]);
+            });
             modelBuilder.Entity<ExampleTable>(entity =>
             {
+                entity.HasOne(child => child.ExampleParent)
+                    .WithMany(parent => parent.ExampleTables)
+                    .HasForeignKey(child => child.ParentID)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName($"FK_${nameof(ExampleTable)}_{nameof(ExampleParent)}");
                 entity.HasData(
                     [new ExampleTable()
                     {
-                        ID = -1
+                        ID = -1,
+                        ParentID = -1
                     },new ExampleTable()
                     {
-                        ID = -2
+                        ID = -2,
+                        ParentID = -1
                     },new ExampleTable()
                     {
-                        ID = -3
+                        ID = -3,
+                        ParentID = -1
                     }]
                 );
             });
+
             OnModelCreatingPartial(modelBuilder);
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
