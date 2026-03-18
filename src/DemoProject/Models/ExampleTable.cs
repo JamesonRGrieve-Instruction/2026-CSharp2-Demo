@@ -11,6 +11,7 @@ namespace DemoProject.Models;
 public partial class ExampleTable
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column("id")]
     public int Id { get; set; }
 

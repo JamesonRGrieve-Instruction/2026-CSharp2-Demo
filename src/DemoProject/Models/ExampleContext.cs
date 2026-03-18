@@ -29,7 +29,6 @@ public partial class ExampleContext : DbContext
     {
         modelBuilder.Entity<EfmigrationsLock>(entity =>
         {
-            entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<ExampleTable>(entity =>
