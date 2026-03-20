@@ -3,15 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DemoProject.Models
 {
-    [Table("example_parent")]
-    public partial class ExampleParent
+    [Table("manufacturer")]
+    public partial class Manufacturer
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
         public int ID { get; set; }
 
-        [InverseProperty(nameof(ExampleTable.ExampleParent))]
-        public virtual List<ExampleTable>? ExampleTables { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
+
+        [InverseProperty(nameof(Model.Manufacturer))]
+        public virtual List<Model>? Models { get; set; }
     }
 }

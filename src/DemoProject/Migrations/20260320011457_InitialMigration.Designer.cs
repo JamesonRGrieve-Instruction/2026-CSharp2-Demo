@@ -2,6 +2,7 @@
 using DemoProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoProject.Migrations
 {
     [DbContext(typeof(ExampleContext))]
-    partial class ExampleContextModelSnapshot : ModelSnapshot
+    [Migration("20260320011457_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.4");
@@ -31,18 +34,6 @@ namespace DemoProject.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("manufacturer");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = -1,
-                            Name = "Toyota"
-                        },
-                        new
-                        {
-                            ID = -2,
-                            Name = "Mitsubishi"
-                        });
                 });
 
             modelBuilder.Entity("DemoProject.Models.Model", b =>
@@ -66,32 +57,6 @@ namespace DemoProject.Migrations
                     b.HasIndex("ManufacturerID");
 
                     b.ToTable("model");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = -1,
-                            ManufacturerID = -1,
-                            Name = "Supra"
-                        },
-                        new
-                        {
-                            ID = -2,
-                            ManufacturerID = -1,
-                            Name = "Soarer"
-                        },
-                        new
-                        {
-                            ID = -3,
-                            ManufacturerID = -2,
-                            Name = "3000GT"
-                        },
-                        new
-                        {
-                            ID = -4,
-                            ManufacturerID = -2,
-                            Name = "Eclipse"
-                        });
                 });
 
             modelBuilder.Entity("DemoProject.Models.Vehicle", b =>
@@ -118,36 +83,6 @@ namespace DemoProject.Migrations
                     b.HasIndex("ModelID");
 
                     b.ToTable("vehicle");
-
-                    b.HasData(
-                        new
-                        {
-                            VIN = "VIN00000000000001",
-                            Colour = "Red",
-                            ModelID = -1,
-                            ModelYear = 1998
-                        },
-                        new
-                        {
-                            VIN = "VIN00000000000002",
-                            Colour = "Black",
-                            ModelID = -2,
-                            ModelYear = 1995
-                        },
-                        new
-                        {
-                            VIN = "VIN00000000000003",
-                            Colour = "White",
-                            ModelID = -3,
-                            ModelYear = 1999
-                        },
-                        new
-                        {
-                            VIN = "VIN00000000000004",
-                            Colour = "Blue",
-                            ModelID = -4,
-                            ModelYear = 2001
-                        });
                 });
 
             modelBuilder.Entity("DemoProject.Models.Model", b =>

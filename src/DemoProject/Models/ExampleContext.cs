@@ -14,8 +14,9 @@ namespace DemoProject.Models
         {
 
         }
-        public virtual DbSet<ExampleTable> ExampleTables { get; set; }
-        public virtual DbSet<ExampleParent> ExampleParents { get; set; }
+        public virtual DbSet<Vehicle> Vehicles { get; set; }
+        public virtual DbSet<Model> Models { get; set; }
+        public virtual DbSet<Manufacturer> Manufacturers { get; set; }
         public static void LoadEnvironment()
         {
             try
@@ -66,35 +67,85 @@ namespace DemoProject.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ExampleParent>(entity =>
+            modelBuilder.Entity<Manufacturer>(entity =>
             {
                 entity.HasData([
-                    new ExampleParent() {
-                        ID = -1
+                    new Manufacturer() {
+                        ID = -1,
+                        Name = "Toyota"
+                    },
+                    new Manufacturer() {
+                        ID = -2,
+                        Name = "Mitsubishi"
                     }
                 ]);
             });
-            modelBuilder.Entity<ExampleTable>(entity =>
+            modelBuilder.Entity<Model>(entity =>
             {
-                entity.HasOne(child => child.ExampleParent)
-                    .WithMany(parent => parent.ExampleTables)
-                    .HasForeignKey(child => child.ParentID)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName($"FK_${nameof(ExampleTable)}_{nameof(ExampleParent)}");
-                entity.HasData(
-                    [new ExampleTable()
-                    {
+                entity.HasOne(child => child.Manufacturer)
+                .WithMany(parent => parent.Models)
+                .HasForeignKey(child => child.ManufacturerID)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName($"FK_${nameof(Model)}_{nameof(Manufacturer)}");
+                entity.HasData([
+                    new Model() {
                         ID = -1,
-                        ParentID = -1
-                    },new ExampleTable()
-                    {
+                        Name = "Supra",
+                        ManufacturerID = -1,
+                    },
+                    new Model() {
                         ID = -2,
-                        ParentID = -1
-                    },new ExampleTable()
-                    {
+                        Name = "Soarer",
+                        ManufacturerID = -1,
+                    },
+                    new Model() {
                         ID = -3,
-                        ParentID = -1
-                    }]
+                        Name = "3000GT",
+                        ManufacturerID = -2,
+                    },
+                    new Model() {
+                        ID = -4,
+                        Name = "Eclipse",
+                        ManufacturerID = -2
+                    }
+                ]);
+            });
+            modelBuilder.Entity<Vehicle>(entity =>
+            {
+                entity.HasOne(child => child.Model)
+                    .WithMany(parent => parent.Vehicles)
+                    .HasForeignKey(child => child.ModelID)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName($"FK_${nameof(Vehicle)}_{nameof(Model)}");
+                entity.HasData(
+                    new Vehicle()
+                    {
+                        VIN = "VIN00000000000001",
+                        ModelID = -1, // Supra
+                        ModelYear = 1998,
+                        Colour = "Red"
+                    },
+                    new Vehicle()
+                    {
+                        VIN = "VIN00000000000002",
+                        ModelID = -2, // Soarer
+                        ModelYear = 1995,
+                        Colour = "Black"
+                    },
+                    new Vehicle()
+                    {
+                        VIN = "VIN00000000000003",
+                        ModelID = -3, // 3000GT
+                        ModelYear = 1999,
+                        Colour = "White"
+                    },
+                    new Vehicle()
+                    {
+                        VIN = "VIN00000000000004",
+                        ModelID = -4, // Eclipse
+                        ModelYear = 2001,
+                        Colour = "Blue"
+                    }
                 );
             });
 
