@@ -6,11 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DemoProject.Models;
 
-[Table("__EFMigrationsLock")]
-public partial class EfmigrationsLock
+[Table("classroom")]
+public partial class Classroom
 {
     [Key]
+    [Column("id")]
     public int Id { get; set; }
 
-    public string Timestamp { get; set; } = null!;
+    [Column("room_number")]
+    public int RoomNumber { get; set; }
+
+    [InverseProperty("Class")]
+    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
 }
