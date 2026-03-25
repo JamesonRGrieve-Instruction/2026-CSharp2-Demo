@@ -11,6 +11,9 @@ namespace DemoProject.Models
         [Column("id")]
         public int ID { get; set; }
 
+        [Column("name")]
+        public string Name { get; set; } = "Temp";
+
         [InverseProperty(nameof(ExampleTable.ExampleParent))]
         public virtual List<ExampleTable>? ExampleTables { get; set; }
     }
