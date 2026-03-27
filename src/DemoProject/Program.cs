@@ -1,4 +1,6 @@
-﻿namespace DemoProject;
+﻿using DemoProject.Models;
+
+namespace DemoProject;
 
 
 class Program
@@ -21,19 +23,69 @@ class Program
                     entityMenuChoice = Console.ReadLine().Trim();
                     if (entityMenuChoice == "1")
                     {
-
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            Console.Write("Please enter the Room Number: ");
+                            context.Add(new ClassRoom()
+                            {
+                                RoomNumber = int.Parse(Console.ReadLine())
+                            });
+                            context.SaveChanges();
+                        }
                     }
                     else if (entityMenuChoice == "2")
                     {
-
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            foreach (ClassRoom parent in context.ClassRooms.ToList())
+                            {
+                                Console.WriteLine(parent.ID + ": " + parent.RoomNumber);
+                            }
+                        }
                     }
                     else if (entityMenuChoice == "3")
                     {
-
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            foreach (ClassRoom parent in context.ClassRooms.ToList())
+                            {
+                                Console.WriteLine(parent.ID + ": " + parent.RoomNumber);
+                            }
+                            Console.Write("Please enter the ID of the target for update: ");
+                            ClassRoom? forEdit = context.ClassRooms.Where(parent => parent.ID == int.Parse(Console.ReadLine())).FirstOrDefault();
+                            if (forEdit == null)
+                            {
+                                Console.WriteLine("I can't find that!");
+                            }
+                            else
+                            {
+                                Console.Write("Please enter the new Room Number: ");
+                                forEdit.RoomNumber = int.Parse(Console.ReadLine());
+                                context.SaveChanges();
+                            }
+                        }
                     }
                     else if (entityMenuChoice == "4")
                     {
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            foreach (ClassRoom parent in context.ClassRooms.ToList())
+                            {
+                                Console.WriteLine(parent.ID + ": " + parent.RoomNumber);
+                            }
+                            Console.Write("Please enter the ID of the target for deletion: ");
 
+                            ClassRoom? forRemoval = context.ClassRooms.Where(parent => parent.ID == int.Parse(Console.ReadLine())).FirstOrDefault();
+                            if (forRemoval == null)
+                            {
+                                Console.WriteLine("I can't find that!");
+                            }
+                            else
+                            {
+                                context.ClassRooms.Remove(forRemoval);
+                                context.SaveChanges();
+                            }
+                        }
                     }
                 } while (entityMenuChoice != "0");
             }

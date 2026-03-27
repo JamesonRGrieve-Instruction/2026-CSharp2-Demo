@@ -14,8 +14,8 @@ namespace DemoProject.Models
         {
 
         }
-        public virtual DbSet<Student> ExampleTables { get; set; }
-        public virtual DbSet<ClassRoom> ExampleParents { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<ClassRoom> ClassRooms { get; set; }
         public static void LoadEnvironment()
         {
             try
@@ -24,8 +24,8 @@ namespace DemoProject.Models
                 string path = fileName;
                 while (!File.Exists(path) && !(Path.GetFullPath(path) == Path.GetPathRoot(Path.GetFullPath(path)) + fileName))
                 {
-                    Console.WriteLine("Full Path: " + Path.GetFullPath(path));
-                    Console.WriteLine("Root Path: " + Path.GetPathRoot(Path.GetFullPath(path)) + fileName);
+                    // Console.WriteLine("Full Path: " + Path.GetFullPath(path));
+                    // Console.WriteLine("Root Path: " + Path.GetPathRoot(Path.GetFullPath(path)) + fileName);
                     path = "../" + path;
                 }
                 Env.Load(path);
