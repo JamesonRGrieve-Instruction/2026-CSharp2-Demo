@@ -1,4 +1,5 @@
 ﻿using DemoProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoProject;
 
@@ -94,8 +95,93 @@ class Program
                 string entityMenuChoice = "";
                 do
                 {
+                    Console.Write("Select an Operation\n\t1. Create\n\t2. Read\n\t3. Update\n\t4. Delete\n\t0. Exit\nChoose: ");
 
+                    entityMenuChoice = Console.ReadLine().Trim();
+                    if (entityMenuChoice == "1")
+                    {
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            Student forCreation = new Student();
+                            Console.Write("Please enter the First Name: ");
+                            forCreation.FirstName = Console.ReadLine().Trim();
+                            Console.Write("Please enter the Last Name: ");
+                            forCreation.LastName = Console.ReadLine().Trim();
+                            foreach (ClassRoom parent in context.ClassRooms.ToList())
+                            {
+                                Console.WriteLine(parent.ID + ": " + parent.RoomNumber);
+                            }
+                            Console.Write("Please enter the ID of the Room: ");
+                            forCreation.ClassRoomID = int.Parse(Console.ReadLine());
+                            context.Add(forCreation);
+                            context.SaveChanges();
+                        }
+                    }
+                    else if (entityMenuChoice == "2")
+                    {
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            foreach (Student entity in context.Students.Include(entity => entity.ClassRoom).ToList())
+                            {
+                                Console.WriteLine($"{entity.ID}: {entity.FirstName} {entity.LastName} of {entity.ClassRoom.RoomNumber}");
+                            }
+                        }
+                    }
+                    else if (entityMenuChoice == "3")
+                    {
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            foreach (Student entity in context.Students.Include(entity => entity.ClassRoom).ToList())
+                            {
+                                Console.WriteLine($"{entity.ID}: {entity.FirstName} {entity.LastName} of {entity.ClassRoom.RoomNumber}");
+                            }
+                            Console.Write("Please enter the ID of the target for update: ");
+                            Student? forEdit = context.Students.Where(entity => entity.ID == int.Parse(Console.ReadLine())).FirstOrDefault();
+                            if (forEdit == null)
+                            {
+                                Console.WriteLine("I can't find that!");
+                            }
+                            else
+                            {
+                                Console.Write("Please enter the First Name: ");
+                                forEdit.FirstName = Console.ReadLine().Trim();
+                                Console.Write("Please enter the Last Name: ");
+                                forEdit.LastName = Console.ReadLine().Trim();
+                                foreach (ClassRoom parent in context.ClassRooms.ToList())
+                                {
+                                    Console.WriteLine(parent.ID + ": " + parent.RoomNumber);
+                                }
+                                Console.Write("Please enter the ID of the Room: ");
+                                forEdit.ClassRoomID = int.Parse(Console.ReadLine());
+
+                                context.SaveChanges();
+                            }
+                        }
+                    }
+                    else if (entityMenuChoice == "4")
+                    {
+                        using (ExampleContext context = new ExampleContext())
+                        {
+                            foreach (Student entity in context.Students.Include(entity => entity.ClassRoom).ToList())
+                            {
+                                Console.WriteLine($"{entity.ID}: {entity.FirstName} {entity.LastName} of {entity.ClassRoom.RoomNumber}");
+                            }
+                            Console.Write("Please enter the ID of the target for deletion: ");
+
+                            Student? forRemoval = context.Students.Where(entity => entity.ID == int.Parse(Console.ReadLine())).FirstOrDefault();
+                            if (forRemoval == null)
+                            {
+                                Console.WriteLine("I can't find that!");
+                            }
+                            else
+                            {
+                                context.Students.Remove(forRemoval);
+                                context.SaveChanges();
+                            }
+                        }
+                    }
                 } while (entityMenuChoice != "0");
+
             }
         } while (choice != "0");
     }
