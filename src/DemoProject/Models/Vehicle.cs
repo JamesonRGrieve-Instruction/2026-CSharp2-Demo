@@ -13,6 +13,9 @@ public partial class Vehicle
     [Column("vin")]
     public string Vin { get; set; } = null!;
 
+    [Column("odometer")]
+    public int Odometer { get; set; }
+
     [Column("model_id")]
     public int ModelId { get; set; }
 
