@@ -27,14 +27,80 @@ public partial class CarsContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Manufacturer>(entity =>
+        {
+            entity.HasData([
+                new Manufacturer() {
+                                Id = -1,
+                                Name = "Toyota"
+                            },
+                            new Manufacturer() {
+                                Id = -2,
+                                Name = "Mitsubishi"
+                            }
+            ]);
+        });
+
         modelBuilder.Entity<Model>(entity =>
         {
             entity.HasOne(d => d.Manufacturer).WithMany(p => p.Models).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasData([
+        new Model() {
+                        Id = -1,
+                        Name = "Supra",
+                        ManufacturerId = -1,
+                    },
+                    new Model() {
+                        Id = -2,
+                        Name = "Soarer",
+                        ManufacturerId = -1,
+                    },
+                    new Model() {
+                        Id = -3,
+                        Name = "3000GT",
+                        ManufacturerId = -2,
+                    },
+                    new Model() {
+                        Id = -4,
+                        Name = "Eclipse",
+                        ManufacturerId = -2
+                    }
+    ]);
+
         });
 
         modelBuilder.Entity<Vehicle>(entity =>
         {
             entity.HasOne(d => d.Model).WithMany(p => p.Vehicles).OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasData([
+                    new Vehicle()
+                    {
+                        Vin = "VIN00000000000001",
+                        ModelId = -1, // Supra
+                        Odometer = 100
+
+                    },
+                    new Vehicle()
+                    {
+                        Vin = "VIN00000000000002",
+                        ModelId = -2, // Soarer
+                        Odometer = 100
+                    },
+                    new Vehicle()
+                    {
+                        Vin = "VIN00000000000003",
+                        ModelId = -3, // 3000GT
+                        Odometer = 100
+
+                    },
+                    new Vehicle()
+                    {
+                        Vin = "VIN00000000000004",
+                        ModelId = -4, // Eclipse
+                        Odometer = 100
+
+                    }]);
+
         });
 
         OnModelCreatingPartial(modelBuilder);

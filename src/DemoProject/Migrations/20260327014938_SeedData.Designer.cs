@@ -2,6 +2,7 @@
 using DemoProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoProject.Migrations
 {
     [DbContext(typeof(CarsContext))]
-    partial class CarsContextModelSnapshot : ModelSnapshot
+    [Migration("20260327014938_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
@@ -119,25 +122,25 @@ namespace DemoProject.Migrations
                         {
                             Vin = "VIN00000000000001",
                             ModelId = -1,
-                            Odometer = 100
+                            Odometer = 0
                         },
                         new
                         {
                             Vin = "VIN00000000000002",
                             ModelId = -2,
-                            Odometer = 100
+                            Odometer = 0
                         },
                         new
                         {
                             Vin = "VIN00000000000003",
                             ModelId = -3,
-                            Odometer = 100
+                            Odometer = 0
                         },
                         new
                         {
                             Vin = "VIN00000000000004",
                             ModelId = -4,
-                            Odometer = 100
+                            Odometer = 0
                         });
                 });
 
