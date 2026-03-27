@@ -4,20 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DemoProject.Models;
 
-public partial class ClassromContext : DbContext
+public partial class CarsContext : DbContext
 {
-    public ClassromContext()
+    public CarsContext()
     {
     }
 
-    public ClassromContext(DbContextOptions<ClassromContext> options)
+    public CarsContext(DbContextOptions<CarsContext> options)
         : base(options)
     {
     }
 
-    public virtual DbSet<Classroom> Classrooms { get; set; }
+    public virtual DbSet<Manufacturer> Manufacturers { get; set; }
 
-    public virtual DbSet<Student> Students { get; set; }
+    public virtual DbSet<Model> Models { get; set; }
+
+    public virtual DbSet<Vehicle> Vehicles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -25,27 +27,14 @@ public partial class ClassromContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Classroom>(entity =>
+        modelBuilder.Entity<Model>(entity =>
         {
-            entity.HasData([
-                new Classroom() {
-                    Id = -1,
-                    RoomNumber = 101,
-                }
-            ]);
+            entity.HasOne(d => d.Manufacturer).WithMany(p => p.Models).OnDelete(DeleteBehavior.ClientSetNull);
         });
-        modelBuilder.Entity<Student>(entity =>
+
+        modelBuilder.Entity<Vehicle>(entity =>
         {
-            entity.HasOne(d => d.Class).WithMany(p => p.Students).OnDelete(DeleteBehavior.ClientSetNull);
-            entity.HasData([
-            new Student() {
-                    Id = -1,
-                    ClassId = -1,
-                    FirstName = "John",
-                    MiddleName = "Bob",
-                    LastName = "Doe"
-                }
-            ]);
+            entity.HasOne(d => d.Model).WithMany(p => p.Vehicles).OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         OnModelCreatingPartial(modelBuilder);
